@@ -1,0 +1,116 @@
+package Projects;// No need to import in your System
+
+import java.util.ArrayList;
+
+abstract class Employee {
+    private String name;
+    private int id;
+
+    public Employee(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public abstract double calculateSalary();
+
+    @Override
+    public String toString() {
+        return "Employee[name: " + name + ", id: " + id + ", Salary: " + calculateSalary() + "]";
+    }
+}
+
+class FullTimeEmployee extends Employee {
+    private double monthly;
+
+    public FullTimeEmployee(String name, int id, double monthly) {
+        super(name, id);
+        this.monthly = monthly;
+    }
+
+    @Override
+    public double calculateSalary() {
+        return monthly;
+    }
+}
+
+class PartTimeEmployee extends Employee {
+    private float hrsWork;
+    private double hrsRate;
+
+    public PartTimeEmployee(String name, int id, float hrsWork, double hrsRate) {
+        super(name, id);
+        this.hrsWork = hrsWork;
+        this.hrsRate = hrsRate;
+    }
+
+    @Override
+    public double calculateSalary() {
+        return hrsRate * hrsWork;
+    }
+}
+
+class PayRollSys {
+    private ArrayList<Employee> employeeList = new ArrayList<>();
+
+    public void addEmployee(Employee employee) {
+        employeeList.add(employee);
+    }
+
+    public void removeEmployee(int id) {
+        Employee employeeToRemove = null;
+        for (Employee empl : employeeList) {
+            if (empl.getId() == id) {
+                employeeToRemove = empl;
+                break;
+            }
+        }
+        if (employeeToRemove != null) {
+            employeeList.remove(employeeToRemove);
+            System.out.println("Employee with ID " + id + " removed.");
+        } else {
+            System.out.println("Employee with ID " + id + " not found.");
+        }
+    }
+
+    public void displayEmployees() {
+        if (employeeList.isEmpty()) {
+            System.out.println("No employees in the system.");
+        } else {
+            for (Employee employee : employeeList) {
+                System.out.println(employee);
+            }
+        }
+    }
+}
+
+public class EmployeePayRoll {
+    public static void main(String[] args) {
+        PayRollSys pay = new PayRollSys();
+
+        FullTimeEmployee fullTime1 = new FullTimeEmployee("Roshan", 51, 500000);
+        PartTimeEmployee partTime1 = new PartTimeEmployee("Rohit", 52, 40, 500);
+
+        pay.addEmployee(fullTime1);
+        pay.addEmployee(partTime1);
+
+        System.out.println("Initial Employee Details:");
+        pay.displayEmployees();
+
+        System.out.println("\nAttempting to remove employee with ID 2:");
+        pay.removeEmployee(2);
+
+        System.out.println("\nAttempting to remove employee with ID 51:");
+        pay.removeEmployee(51);
+
+        System.out.println("\nRemaining Employee Details:");
+        pay.displayEmployees();
+    }
+}
